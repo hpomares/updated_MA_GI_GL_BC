@@ -8,17 +8,16 @@ library(rio)
 library(grid)
 library(tidyverse)
 
-setwd("/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results")
+setwd("./syst_rev/Results")
 
 #1.  read file
-#study_tool <- read_excel("~/Desktop/Skeleton_projects/nutrient_cancer/study_tool.xlsx",sheet = "Work_sheet_v4")
-study_tool <- import("~/Desktop/Skeleton_projects/nutrient_cancer/study_tool.xlsx",sheet = "Work_sheet_v4")
+study_tool <- import("~/study_tool.xlsx",sheet = "Work_sheet_v4")
 str(study_tool)
 
 # sort by year
 #study_tool_sort <- study_tool[order(-study_tool$Year),]
 
-# filter case-control designs
+# filter out case-control designs
 study_tool_cohort<- dplyr::filter(study_tool, Study_design == "Cohort")
 
 # filter for BC
@@ -35,8 +34,8 @@ study_meno_bc<- dplyr::filter(study_bmi_bc, Menopause_status == "All")
 
 # select effect measures
 study_effects<- dplyr::select(study_meno_bc,"Unique_id","Author_year","Name_of_study","Exposure_recoded","cases", "N","Ref_group", "Test_group_recoded",
-                                         "Menopause_status", "hormone_receptors", "summary_effect", "Estimate",
-                                      "LCI_95", "UCI_95", "Country","Adequacy_adjustment","Highest_quantile")
+                              "Menopause_status", "hormone_receptors", "summary_effect", "Estimate",
+                              "LCI_95", "UCI_95", "Country","Adequacy_adjustment","Highest_quantile")
 
 
 # set as numeric columns
@@ -51,7 +50,7 @@ yi <- log(study_effects$Estimate)
 sei <- (log(study_effects$LCI_95) - log(study_effects$UCI_95)) / (2*1.96)
 SE<- abs((study_effects$LCI_95 - study_effects$UCI_95) / 3.92)
 
-# store yi and sei in data set 
+# store yi and sei in dataset 
 study_effects$yi<- yi
 study_effects$sei<- sei
 study_effects$SE<- SE
@@ -165,47 +164,47 @@ str(study_effects_fiber) #8
 #3. Random-effects model (using log risk ratios and variances as input)
 res_SSB <- rma(yi, sei=sei, data= study_effects_SSB, method="REML",slab=Author_year,measure = "RR")
 summary(res_SSB) # 0.16
-reporter(res_SSB, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_SSB, dir= "./syst_rev/Results",format="word_document")
 
 res_GI <- rma(yi, sei=sei, data=study_effects_GI, method="REML",slab=Author_year,measure = "RR")
 summary(res_GI) #* 0.024 I2: 0.03%. The more processed a food is, the higher its GI . p = 0.099 with DL estimator
 #res_GI_table<- as.data.frame(coef(summary(res_GI)))
-#export(res_GI_table, "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/res_GI_table.csv")
-reporter(res_GI, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+#export(res_GI_table, "./syst_rev/Results/res_GI_table.csv")
+reporter(res_GI, dir= "./syst_rev/Results",format="word_document")
 
 res_GL <- rma(yi, sei=sei, data=study_effects_GL, method="REML",slab=Author_year,measure = "RR")
 summary(res_GL) # 0.24
 #res_GL_table<- as.data.frame(coef(summary(res_GL)))
-#export(res_GL_table, "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/res_GL_table.csv")
-reporter(res_GL, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+#export(res_GL_table, "./syst_rev/Results/res_GL_table.csv")
+reporter(res_GL, dir= "./syst_rev/Results",format="word_document")
 
 res_ts <- rma(yi, sei=sei, data=study_effects_ts, method="REML",slab=Author_year,measure = "RR")
 summary(res_ts) # 0.5
-reporter(res_ts, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_ts, dir= "./syst_rev/Results",format="word_document")
 
 res_sf <- rma(yi, sei=sei, data=study_effects_sf, method="REML",slab=Author_year,measure = "RR")
 summary(res_sf) # 0.4
-reporter(res_sf, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_sf, dir= "./syst_rev/Results",format="word_document")
 
 res_as <- rma(yi, sei=sei, data=study_effects_as, method="REML",slab=Author_year,measure = "RR")
 summary(res_as) # 0.32
-reporter(res_as, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_as, dir= "./syst_rev/Results",format="word_document")
 
 res_cs <- rma(yi, sei=sei, data=study_effects_cs, method="REML",slab=Author_year,measure = "RR")
 summary(res_cs) # 0.35
-reporter(res_cs, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_cs, dir= "./syst_rev/Results",format="word_document")
 
 # res_sd <- rma(yi, sei=sei, data=study_effects_sd, method="REML",slab=Author_year,measure = "RR")
 # summary(res_sd) # 0.0002
-# reporter(res_sd, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+# reporter(res_sd, dir= "./syst_rev/Results",format="word_document")
 
 res_fj <- rma(yi, sei=sei, data=study_effects_fj, method="REML",slab=Author_year,measure = "RR")
 summary(res_fj) # 0.37
-reporter(res_fj, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_fj, dir= "./syst_rev/Results",format="word_document")
 
 res_fiber <- rma(yi, sei=sei, data=study_effects_fiber, method="REML",slab=Author_year,measure = "RR")
 summary(res_fiber) # 0.0598
-reporter(res_fiber, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_fiber, dir= "./syst_rev/Results",format="word_document")
 
 # 3.1 prediction intervals for future values
 pred_res_SSB<- predict(res_SSB, transf=exp, digits=2); pred_res_SSB
@@ -226,11 +225,11 @@ summary(fes_SSB) # 0.15
 fes_GI <- rma(yi, sei=sei, data=study_effects_GI, method="FE", slab=Author_year,measure = "RR") 
 summary(fes_GI) #* 0.0079. I2: 0%
 fes_GI_table<- as.data.frame(coef(summary(fes_GI)))
-#export(fes_GI_table, "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/fes_GI_table.csv")
+#export(fes_GI_table, "./syst_rev/Results/fes_GI_table.csv")
 fes_GL <- rma(yi, sei=sei, data=study_effects_GL, method="FE", slab=Author_year,measure = "RR") 
 summary(fes_GL)#0.19
 fes_GL_table<- as.data.frame(coef(summary(fes_GL)))
-#export(fes_GL_table, "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/fes_GL_table.csv")
+#export(fes_GL_table, "./syst_rev/Results/fes_GL_table.csv")
 fes_ts <- rma(yi, sei=sei, data=study_effects_ts, method="FE", slab=Author_year,measure = "RR") 
 summary(fes_ts) # 0.61
 fes_sf <- rma(yi, sei=sei, data=study_effects_sf, method="FE", slab=Author_year,measure = "RR") 
@@ -242,7 +241,7 @@ summary(fes_cs) # 0.35
 fes_sd <- rma(yi, sei=sei, data=study_effects_sd, method="FE", slab=Author_year,measure = "RR") 
 summary(fes_sd) #* 0.0002
 fes_sd_table<- as.data.frame(coef(summary(fes_sd)))
-#export(fes_sd_table, "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/fes_sd_table.csv")
+#export(fes_sd_table, "./syst_rev/Results/fes_sd_table.csv")
 fes_fj <- rma(yi, sei=sei, data=study_effects_fj, method="FE", slab=Author_year,measure = "RR") 
 summary(fes_fj) # 0.37
 fes_fiber <- rma(yi, sei=sei, data=study_effects_fiber, method="FE", slab=Author_year,measure = "RR") 
@@ -272,7 +271,7 @@ mlabfun <- function(text, res) {
 
 # RE-significants
 # Glycemic index
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_res_GI.pdf")
+pdf(file= "./syst_rev/Results/forestplot_res_GI.pdf")
 forest(res_GI, atransf=exp, at=log(c(.25, 1, 2, 2.5,4)),showweights=TRUE,
        header="First author(s) and Year",order=order(study_effects_GI$yi),xlim=c(-8,5))#mlab= mlabfun("RE Model", res_GI)
 grid.text("GI and BC", .5, .9, gp=gpar(cex=2))
@@ -287,7 +286,7 @@ dev.off()
 regtest(res_GI)
 
 # Glycemic load
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_res_GL.pdf")
+pdf(file= "./syst_rev/Results/forestplot_res_GL.pdf")
 forest(res_GL, atransf=exp, at=log(c(.25, 1, 2, 2.5,4)), showweights=TRUE,header="First author(s) and Year",order=order(study_effects_GL$yi),xlim=c(-8,5))#, mlab= mlabfun("RE Model", res_GI)
 grid.text("GL and BC", .5, .9, gp=gpar(cex=2))
 # funnel plot 
@@ -300,7 +299,7 @@ dev.off()
 regtest(res_GL)
 
 # Fiber intake
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_res_fiber.pdf")
+pdf(file= "./syst_rev/Results/forestplot_res_fiber.pdf")
 forest(res_fiber, atransf=exp, at=log(c(.25, 1, 2, 2.5,4)), showweights=TRUE,header="First author(s) and Year",order=order(study_effects_fiber$yi),xlim=c(-8,5))#mlab= mlabfun("FE Model", fes_fiber)
 grid.text("Fiber intake and BC", .5, .9, gp=gpar(cex=2))
 # funnel plot
@@ -314,7 +313,7 @@ regtest(res_fiber)
 
 # FE-significants
 # Glycemic index
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_fes_GI.pdf")
+pdf(file= "./syst_rev/Results/forestplot_fes_GI.pdf")
 forest(fes_GI, atransf=exp, at=log(c(.25, 1, 2, 2.5,4)),showweights=TRUE,header="First author(s) and Year",order=order(study_effects_GI$yi),xlim=c(-8,5))#, mlab= mlabfun("FE Model", res_GI)
 grid.text("GI and BC", .5, .9, gp=gpar(cex=2))
 # funnel plot
@@ -327,7 +326,7 @@ dev.off()
 regtest(fes_GI)
 
 # Glycemic load
-# pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_fes_GL.pdf")
+# pdf(file= "./syst_rev/Results/forestplot_fes_GL.pdf")
 # forest(fes_GL, atransf=exp, at=log(c(.25, 1, 2, 2.5,4)), showweights=TRUE,header="First author(s) and Year",order=order(study_effects_GL$yi),xlim=c(-8,5))#, mlab= mlabfun("FE Model", res_GI)
 # grid.text("GL and BC", .5, .9, gp=gpar(cex=2))
 # # funnel plot
@@ -340,7 +339,7 @@ regtest(fes_GI)
 # regtest(fes_GL)
 
 # Sugary drinks
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_fes_sd.pdf")
+pdf(file= "./syst_rev/Results/forestplot_fes_sd.pdf")
 forest(fes_sd, atransf=exp, at=log(c(.25, 1, 2, 2.5,4)), showweights=TRUE,header="First author(s) and Year",order=order(study_effects_sd$yi),xlim=c(-8,5))#, mlab= mlabfun("FE Model", res_GI)
 grid.text("Sugary drinks and BC", .5, .9, gp=gpar(cex=2))
 # funnel plot
@@ -353,7 +352,7 @@ dev.off()
 regtest(fes_sd)
 
 # Fiber intake
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_fes_fiber.pdf")
+pdf(file= "./syst_rev/Results/forestplot_fes_fiber.pdf")
 forest(fes_fiber, atransf=exp, at=log(c(.25, 1, 2, 2.5,4)), showweights=TRUE,header="First author(s) and Year",order=order(study_effects_fiber$yi),xlim=c(-8,5), mlab= mlabfun("FE Model", fes_fiber))
 grid.text("Fiber intakes and BC", .5, .9, gp=gpar(cex=2))
 # funnel plot
@@ -512,7 +511,7 @@ summary(res_fj_A) # 0.79
 res_fiber_A <- rma(yi, sei=sei, data=study_effects_fiber_A, method="REML",slab=Author_year,measure = "RR")
 summary(res_fiber_A) #0.0008 
 #
-reporter(res_fiber_A, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_fiber_A, dir= "./syst_rev/Results",format="word_document")
 pred_res_fiber_A<- predict(res_fiber_A, transf=exp, digits=2); pred_res_fiber_A
 #
 predict(res_GI_A, transf = exp)
@@ -638,12 +637,12 @@ str(study_effects_fiber_B) #7
 #3B. random-effects model (using log risk ratios and variances as input)
 res_SSB_B <- rma(yi, sei=sei, data=study_effects_SSB_B, method="REML",slab=Author_year,measure = "RR")
 summary(res_SSB_B) # 0.055
-reporter(res_SSB_B, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_SSB_B, dir= "./syst_rev/Results",format="word_document")
 pred_res_SSB_B<- predict(res_SSB_B, transf=exp, digits=2); pred_res_SSB_B
 #
 res_GI_B <- rma(yi, sei=sei, data=study_effects_GI_B, method="REML",slab=Author_year,measure = "RR")
 summary(res_GI_B) # 0.0077
-reporter(res_GI_B, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_GI_B, dir= "./syst_rev/Results",format="word_document")
 pred_res_GI_B<- predict(res_GI_B, transf=exp, digits=2); pred_res_GI_B
 #
 res_GL_B <- rma(yi, sei=sei, data=study_effects_GL_B, method="REML",slab=Author_year,measure = "RR")
@@ -657,7 +656,7 @@ res_fj_B <- rma(yi, sei=sei, data=study_effects_fj_B, method="REML",slab=Author_
 summary(res_fj_B) # 0.19
 res_fiber_B <- rma(yi, sei=sei, data=study_effects_fiber_B, method="REML",slab=Author_year,measure = "RR")
 summary(res_fiber_B) # 0.018
-reporter(res_fiber_B, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_fiber_B, dir= "./syst_rev/Results",format="word_document")
 pred_res_fiber_B<- predict(res_fiber_B, transf=exp, digits=2); pred_res_fiber_B
 #
 predict(res_GI_B, transf = exp)
@@ -916,7 +915,7 @@ summary(res_GI_D) # 0.58
 #
 res_GL_D <- rma(yi, sei=sei, data=study_effects_GL_D, method="REML",slab=Author_year,measure = "RR")
 summary(res_GL_D)# 0.0043
-reporter(res_GL_D, dir= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results",format="word_document")
+reporter(res_GL_D, dir= "./syst_rev/Results",format="word_document")
 pred_res_GL_D<- predict(res_GL_D, transf=exp, digits=2); pred_res_GL_D
 # res_ts_D <- rma(yi, sei=sei, data=study_effects_ts_D, method="REML",slab=Author_year,measure = "RR")
 # res_sf_D <- rma(yi, sei=sei, data=study_effects_sf_D, method="REML",slab=Author_year,measure = "RR")
