@@ -9,11 +9,11 @@ library(rio)
 library(grid)
 library(tidyverse)
 
-setwd("/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results")
+setwd("./syst_rev/Results")
 
 #1.  read file
-#study_tool <- read_excel("~/Desktop/Skeleton_projects/nutrient_cancer/study_tool.xlsx",sheet = "Work_sheet_v4")
-study_tool <- import("~/Desktop/Skeleton_projects/nutrient_cancer/study_tool.xlsx",sheet = "Work_sheet_v4")
+#study_tool <- read_excel("~/study_tool.xlsx",sheet = "Work_sheet_v4")
+study_tool <- import("~/study_tool.xlsx",sheet = "Work_sheet_v4")
 str(study_tool)
 
 # sort by year
@@ -82,7 +82,7 @@ summary(res_GI)
 tmp_GI <- cumul(res_GI, order=Year)
 
 # cumulative forest plot
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_res_GI_cum.pdf")
+pdf(file= "./syst_rev/Results/forestplot_res_GI_cum.pdf")
 forest(tmp_GI, xlim=c(-4,2), at=log(c(0.25, 0.5, 1, 2)),shade=TRUE, atransf=exp, digits=c(2L,3L), cex=0.85, header="Author(s) and Year")
 grid.text("GI cumulative and BC", .5, .9, gp=gpar(cex=2))
 dev.off()
@@ -105,7 +105,7 @@ summary(res_GL)
 tmp_GL <- cumul(res_GL, order=Year)
 
 # cumulative forest plot
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_res_GL_cum.pdf")
+pdf(file= "./syst_rev/Results/forestplot_res_GL_cum.pdf")
 forest(tmp_GL, xlim=c(-4,2), at=log(c(0.25, 0.5, 1, 2)),shade=TRUE, atransf=exp, digits=c(2L,3L), cex=0.85, header="Author(s) and Year")
 grid.text("GL cumulative and BC", .5, .9, gp=gpar(cex=2))
 dev.off()
@@ -127,7 +127,7 @@ summary(res_fiber)
 tmp_fiber <- cumul(res_fiber, order=Year)
 
 # cumulative forest plot
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_res_fiber_cum.pdf")
+pdf(file= "./syst_rev/Results/forestplot_res_fiber_cum.pdf")
 forest(tmp_fiber, xlim=c(-4,2), at=log(c(0.25, 0.5, 1, 2)),shade=TRUE, atransf=exp, digits=c(2L,3L), cex=0.85, header="Author(s) and Year")
 grid.text("Fiber intake cumulative and BC", .5, .9, gp=gpar(cex=2))
 dev.off()
@@ -149,7 +149,7 @@ summary(res_ts)
 tmp_ts<- cumul(res_ts, order=Year)
 
 # cumulative forest plot
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_res_ts_cum.pdf")
+pdf(file= "./syst_rev/Results/forestplot_res_ts_cum.pdf")
 forest(tmp_ts, xlim=c(-4,2), at=log(c(0.25, 0.5, 1, 2)),shade=TRUE, atransf=exp, digits=c(2L,3L), cex=0.85, header="Author(s) and Year")
 grid.text("Sugar intake cumulative and BC", .5, .9, gp=gpar(cex=2))
 dev.off()
@@ -171,7 +171,7 @@ summary(res_SSB)
 tmp_SSB<- cumul(res_SSB, order= Year)
 
 # cumulative forest plot
-pdf(file= "/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results/forestplot_res_SSB_cum.pdf")
+pdf(file= "./syst_rev/Results/forestplot_res_SSB_cum.pdf")
 forest(tmp_SSB, xlim=c(-4,2), at=log(c(0.25, 0.5, 1, 2)),shade=TRUE, atransf=exp, digits=c(2L,3L), cex=0.85, header="Author(s) and Year")
 grid.text("Sugar-sweetened beverages (SSB) cumulative and BC", .5, .9, gp=gpar(cex=2))
 dev.off()
