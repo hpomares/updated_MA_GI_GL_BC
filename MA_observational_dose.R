@@ -10,10 +10,10 @@ library(rio)
 library(grid)
 library(dosresmeta)
 
-setwd("/Users/hugopomaresmillan/Desktop/Skeleton_projects/nutrient_cancer/syst_rev/Results")
+setwd("/Users/hugopomaresmillan/syst_rev/Results")
 
 #1.  read file
-study_tool <- read_excel("~/Desktop/Skeleton_projects/nutrient_cancer/study_tool.xlsx",sheet = "Work_sheet_v4")
+study_tool <- read_excel("~/study_tool.xlsx",sheet = "Work_sheet_v4")
 str(study_tool)
 
 # sort by year
@@ -54,20 +54,20 @@ str(study_effects)
 study_effects_single <- dplyr::filter(study_effects, 
                                       # Author_year =="Sieri S et al. 2013" | 
                                       Author_year =="Navarro-Silvera SA et al. 2005" | 
-                                      Author_year =="Romanos‐Nanclares A et al. 2021" |
-                                      Author_year =="Larsson SC et al. 2009" | 
-                                      Author_year =="Romieu I et al. 2012" | 
-                                      Author_year =="Shikany JM et al. 2011"|
-                                      Author_year =="Makarem N et al. 2017" |
-                                      Author_year =="Lajous M et al. 2008" |
-                                      Author_year =="Wen W et al. 2009"  |
-                                      Author_year =="Holmes MD et al. 2004" |
-                                      Author_year =="Higginbotham S et al. 2004" |
-                                      Author_year =="Jonas CR et al. 2003" |
-                                      Author_year =="Nielsen TG et al. 2005" |
-                                      Author_year =="George SM et al. 2008"  # |
+                                        Author_year =="Romanos‐Nanclares A et al. 2021" |
+                                        Author_year =="Larsson SC et al. 2009" | 
+                                        Author_year =="Romieu I et al. 2012" | 
+                                        Author_year =="Shikany JM et al. 2011"|
+                                        Author_year =="Makarem N et al. 2017" |
+                                        Author_year =="Lajous M et al. 2008" |
+                                        Author_year =="Wen W et al. 2009"  |
+                                        Author_year =="Holmes MD et al. 2004" |
+                                        Author_year =="Higginbotham S et al. 2004" |
+                                        Author_year =="Jonas CR et al. 2003" |
+                                        Author_year =="Nielsen TG et al. 2005" |
+                                        Author_year =="George SM et al. 2008"  # |
                                       #Author_year =="Giles GC et al. 2006"
-                                                                      )
+)
 # # Including case-control study design
 # # Prioritize EPIC italy rather than ORDET== Sieri et al 2007
 # # Nurses Health study II in Cho E et al. 2003
@@ -107,7 +107,7 @@ str(study_effects_gi_all)
 #2.4 fit
 # fixed effects
 meta_fe_gi<- dosresmeta(yi ~ assigned_dose, id = id, type = type, cases = cases, n = N,
-                               se = SE, data = study_effects_gi_all, method = "fixed")
+                        se = SE, data = study_effects_gi_all, method = "fixed")
 summary(meta_fe_gi)
 predict(meta_fe_gi, delta = 1, expo = TRUE)
 
@@ -174,14 +174,14 @@ str(study_effects_gi_all_a) #24
 #2.4 fit
 # fixed effects
 meta_fe_g_a<- dosresmeta(yi ~ assigned_dose, id = id, type = type, cases = cases, n = N,
-                        se = SE, data = study_effects_gi_all_a, method = "fixed")
+                         se = SE, data = study_effects_gi_all_a, method = "fixed")
 summary(meta_fe_g_a)
 predict(meta_fe_g_a, delta = 1, expo = TRUE)
 
 #2.5 fit
 # Random effects
 meta_re_gi_a<- dosresmeta(yi ~ assigned_dose, id = id, type = type, cases = cases, n = N,
-                        se = SE, data = study_effects_gi_all_a, method = "reml")
+                          se = SE, data = study_effects_gi_all_a, method = "reml")
 summary(meta_re_gi_a)
 predict(meta_re_gi_a, delta = 1, expo = TRUE)
 # significant log-linear dose-response association between GI and cancer risk (p=0.01)
@@ -215,7 +215,7 @@ points(dosex_bin$assigned_dose, predict(quad_lin_a, dosex_bin, exp=TRUE)$pred, t
 library(rms)
 k <- quantile(study_effects_gi_all_a$assigned_dose,  probs = c(.35, .65, .95)) #c(.2, .4, .8) 
 spl_a <- dosresmeta(yi ~ rcs(assigned_dose, k), id = id, se = SE, type = type, 
-                  cases = cases, n = N, data = study_effects_gi_all_a)
+                    cases = cases, n = N, data = study_effects_gi_all_a)
 summary(spl_a)
 
 dataTab<-data.frame(assigned_dose=seq(0,110,10))
@@ -311,8 +311,8 @@ with(predict(spl_b, dosex_bin, xref_bin, exp=TRUE),{plot (get("rcs(assigned_dose
 # GL: Glycemic load
 # Prioritize EPIC italy rather than ORDET
 study_effects_single <- dplyr::filter(study_effects, 
-                                        #Author_year =="Sieri S et al. 2013" | 
-                                        Author_year =="George SM et al. 2008"  |
+                                      #Author_year =="Sieri S et al. 2013" | 
+                                      Author_year =="George SM et al. 2008"  |
                                         Author_year =="Navarro-Silvera SA et al. 2005" | 
                                         Author_year =="Romanos‐Nanclares A et al. 2021" |
                                         Author_year =="Larsson SC et al. 2009" | 
@@ -325,7 +325,7 @@ study_effects_single <- dplyr::filter(study_effects,
                                         Author_year =="Higginbotham S et al. 2004" |
                                         Author_year =="Jonas CR et al. 2003" |
                                         Author_year =="Nielsen TG et al. 2005" #| 
-                                        #Author_year =="Giles GC et al. 2006"
+                                      #Author_year =="Giles GC et al. 2006"
 )
 # for dose response Giles do not work
 # study_effects_single <- dplyr::filter(study_effects,
