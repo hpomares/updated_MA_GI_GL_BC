@@ -991,18 +991,4 @@ str(study_effects_fiber_E) #2
 #3.
 res_fiber_E <- rma(yi, sei=sei, data=study_effects_fiber_E, method="REML",slab=Author_year,measure = "RR")
 summary(res_fiber_E) # 0.14
-
-
-###############################################################################
-### BAYESIAN #####
-###############################################################################
-# library(brms)
-# brm_out <- brm(
-#   yi | se(SE) ~ 1 + (1 | Author_year),
-#   data = study_effects_fiber_E,
-#   cores = 4,
-#   file = "metaanalysismodel"
-# )
-# #
-# hypothesis(brm_out, "Intercept > 0.2")
 ############################## END ##############################################
